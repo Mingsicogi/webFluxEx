@@ -17,8 +17,6 @@ import java.util.concurrent.CompletableFuture;
 @Slf4j
 public class AsyncEx {
 
-
-
     AsyncRestTemplate rt = new AsyncRestTemplate(new Netty4ClientHttpRequestFactory(new NioEventLoopGroup(1)));
 
     String url = "http://localhost:18083/service1?req={req}";

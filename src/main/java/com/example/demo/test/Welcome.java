@@ -37,8 +37,14 @@ public class Welcome {
                 .doOnNext(c -> log.info("{}", c));
     }
 
+    @GetMapping("/")
+    public Mono<String> hello(){
+        return Mono.just("Hello webFlux").log(); // Publisher -> (publisher) -> (publisher) ... -> Subscriber
+    }
+
+
     @Service("myService")
-    public class MyService{
+    public static class MyService{
 
         @Async
         public CompletableFuture<String> work(String req){
