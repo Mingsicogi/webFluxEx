@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Service;
@@ -13,7 +14,11 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import java.util.stream.Stream;
 
 @RestController
 @EnableAsync
@@ -41,14 +46,26 @@ public class Welcome {
     }
 
     @GetMapping("/mono")
-    public Mono<String> hello(){
-        return Mono.just("Hello webFlux")
-	                .log(); // Publisher -> (publisher) -> (publisher) ... -> Subscriber
+    public Mono<List<Event>> hello(){// Publisher -> (publisher) -> (publisher) ... -> Subscriber
+	    List<Event> returnData = new ArrayList<>();
+
+	    returnData.add(new Event("aaa", "0101234566778", "길동홍"));
+	    returnData.add(new Event("bbb", "01012938712373", "영수킴"));
+
+        return Mono.just(returnData).log();
     }
 
-    @GetMapping("/flux")
+    @GetMapping(value = "/flux", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
 	public Flux<Event> fluxEx(){
-    	return Flux.just(new Event("aaa", "0101234566778", "길동홍"), new Event("bbb", "01012938712373", "영수킴"));
+
+//	    List<Event> returnData = new ArrayList<>();
+//
+//	    returnData.add(new Event("aaa", "0101234566778", "길동홍"));
+//	    returnData.add(new Event("bbb", "01012938712373", "영수킴"));
+
+	    Stream<Event> generateDataList = Stream.generate(() -> new Event(String.valueOf(System.currentTimeMillis()), UUID.randomUUID().toString(), "test"))/*.limit(10)*/;
+
+    	return Flux.fromStream(generateDataList).take(10);
     }
 
     @Service("myService")
