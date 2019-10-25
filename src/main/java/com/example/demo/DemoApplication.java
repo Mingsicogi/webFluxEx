@@ -2,13 +2,11 @@ package com.example.demo;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.scheduling.annotation.EnableAsync;
-import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+import org.springframework.context.annotation.PropertySource;
 
-import java.util.concurrent.Executor;
-
+@PropertySource(value = {
+    "classpath:mongo.properties"
+}, encoding = "UTF-8")
 @SpringBootApplication
 public class DemoApplication {
 
@@ -20,7 +18,7 @@ public class DemoApplication {
      */
     public static void main(String[] args) {
         System.setProperty("reactor.netty.ioWorkerCount", "1");
-        System.setProperty("reactor.netty.pool.maxConnections", "2000");
+        System.setProperty("reactor.netty.pool.maxConnections", "1");
         SpringApplication.run(DemoApplication.class, args);
 
     }
