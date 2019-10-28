@@ -11,14 +11,14 @@ import java.util.concurrent.Executor;
 @EnableAsync
 public class AsyncConfig {
 
-    @Bean
+    @Bean("minsAsync")
     public Executor getAsyncExecutor(){
         ThreadPoolTaskExecutor threadPoolTaskExecutor = new ThreadPoolTaskExecutor();
 
-        threadPoolTaskExecutor.setCorePoolSize(7);//thread pool size
-        threadPoolTaskExecutor.setMaxPoolSize(42); // 큐가 가득 찼을때 늘어나는 max 사이즈
-        threadPoolTaskExecutor.setQueueCapacity(11);// 큐에 대기하는 스레트 갯수
-        threadPoolTaskExecutor.setThreadNamePrefix("Mins Thread - ");
+        threadPoolTaskExecutor.setCorePoolSize(10);//thread pool size
+        threadPoolTaskExecutor.setMaxPoolSize(20); // 큐가 가득 찼을때 늘어나는 max 사이즈
+        threadPoolTaskExecutor.setQueueCapacity(10);// 큐에 대기하는 스레트 갯수
+        threadPoolTaskExecutor.setThreadNamePrefix("MinsThread - ");
         threadPoolTaskExecutor.initialize();
 
         return threadPoolTaskExecutor;
