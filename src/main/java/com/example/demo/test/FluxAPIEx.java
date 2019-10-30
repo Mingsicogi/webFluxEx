@@ -5,12 +5,9 @@ import org.reactivestreams.Subscriber;
 import org.reactivestreams.Subscription;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.ConnectableFlux;
 import reactor.core.publisher.Flux;
-
-import java.time.Duration;
 
 @RestController
 @RequestMapping("/flux/ex")
@@ -92,25 +89,11 @@ public class FluxAPIEx {
      */
     @GetMapping("/4")
     public Flux<Integer> ex4(){
-        Flux<Integer> stringFlux = Flux.just(1,2,3,4,5,6,7,8,9,10);
-
-        return stringFlux.log().map(num -> num * 2);
-    }
-
-    /**
-     * Combine two stream
-     *
-     * @return
-     */
-    @GetMapping("/5")
-    public Flux<Object> ex5(){
-
-        ConnectableFlux<Object> stringFlux = Flux.create(fluxSink -> {
-           while(true){
-               fluxSink.next(System.currentTimeMillis());
-           }
-        }).publish();
-
-        return stringFlux.autoConnect().log().take(30);
+        return Flux.just(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+                .map(i -> i * 2)
+                .zipWith(Flux.just(11, 12, 13, 14, 15, 16, 17, 18, 19, 20), (a, b) -> {
+                    log.info("{} | {}", a, b);
+                    return a + b;
+                });
     }
 }
